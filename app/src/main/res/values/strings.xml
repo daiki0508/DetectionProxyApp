@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DetectionProxyApp</string>
+    <string name="tv_description">Tap the communication button to communicate with the server and acquire data.</string>
+    <string name="bt_connect">Connect</string>
 </resources>
