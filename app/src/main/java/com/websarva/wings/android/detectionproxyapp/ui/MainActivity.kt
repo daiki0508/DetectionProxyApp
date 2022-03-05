@@ -1,7 +1,9 @@
 package com.websarva.wings.android.detectionproxyapp.ui
 
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import com.websarva.wings.android.detectionproxyapp.R
@@ -24,7 +26,19 @@ class MainActivity : AppCompatActivity() {
 
         // btConnectタップ時の処理
         binding.btConnect.setOnClickListener {
-            viewModel.connect()
+            // proxy検知
+            getSystemService(ConnectivityManager::class.java).also { manager ->
+                val currentNetwork = manager.activeNetwork
+                manager.getLinkProperties(currentNetwork).also { linkProperties ->
+                    if (linkProperties?.httpProxy == null){
+                        Log.i("check", "Proxy is null.")
+                        viewModel.connect()
+                    }else{
+                        Log.w("check", "Proxy detected.")
+                        Toast.makeText(this, "Proxy detected.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
 
         // resultの通知
